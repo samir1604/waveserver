@@ -1,0 +1,5 @@
+{
+  "audioFolderName": "src/audiofiles",
+  "jsonFile": "src/wavlist.json",
+  "processedFolder": "src/audiofiles/processed"
+}
