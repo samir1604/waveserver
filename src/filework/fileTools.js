@@ -1,54 +1,130 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
-const config = require('../config.json');
 
-const audioPath = config.audioFolderName;
-const jsonFile = config.jsonFile;
-const processedFolder = config.processedFolder;
-
-exports.readAudioFolderAsync = function() {
-    return new Promise(resolve => {
-        let fileList = [];
-        fs.readdir(audioPath, (error, files) => {
-            if (error) { throw error; }
-            files.forEach(file => {
-                fileList = [...fileList, {name: file} ];
-            });
-            resolve(fileList);
-        });
-    });
+function createList(storeList, file, stat) {
+	const item = createItem(file, stat);
+	const newStore = [...storeList, item];
+	return newStore;
 }
 
-exports.writeAudioNameToJsonFileAsync = function(list) {
-    return new Promise(resolve => {
-        const strJson = JSON.stringify(list);
-        fs.writeFile(jsonFile, strJson, 'utf-8', err => {
-            if (err) { throw err; }
-            resolve(true);
-        });
-    });
+function createItem(file, { size, birthtime }) {
+	return {
+		name: file,
+		size,
+		created: birthtime,
+	};
 }
 
-exports.readJsonFileAsync = function() {
-    return new Promise(resolve => {
-        fs.readFile(jsonFile, 'utf-8', (error, data) => {
-            if (error) { throw error; }
-
-            console.log('Data: ' + data);
-            if (!data) { resolve([]); } else {
-                resolve(JSON.parse(data));
-            }
-        });
-    });
+function getFileName(file) {
+	const temp = file.split('\\');
+	return temp[temp.length - 1];
 }
 
-module.exports.moveProcessedAudioAsync = function(list) {
-    return new Promise(resolve => {
-        list.forEach(file => {
-            fs.rename(file, path.join(processedFolder, file), error => {
-                if(error) { throw error; }
-                resolve(true);
-            });
-        });
-    });
-}
+module.exports = {
+	async createStoreItem(storeList, file) {
+		return new Promise(resolve => {
+			const fileName = getFileName(file);
+			let temp = [];
+			fs.stat(file, (error, stats) => {
+				if (error) {
+					throw error;
+				}
+				if (stats.isFile()) {
+					temp = createList(storeList, fileName, stats);
+				}
+				resolve(temp);
+			});
+		});
+	},
+
+	async createJsonList(fileNameList, folder, proccess) {
+		const pJson = fileNameList.map(async file => {
+			const elements = await this.createElement(file, folder);
+			await this.moveToProcessedAsync(folder, proccess, file);
+			return elements;
+		});
+		return await Promise.all(pJson);
+	},
+
+	async createElement(file, folder) {
+		const stat = await fs.stat(path.join(folder, file));
+		return createItem(file, stat);
+	},
+
+	async readAudioFromFolderAsync(folder) {
+		return await fs.readdir(folder);
+		/*
+		return new Promise(resolve => {
+			let storeList = [];
+			fs.readdir(folder, (error, files) => {
+				if (error) {
+					throw error;
+				}
+				files.forEach(file => {
+					storeList = this.createStoreItem(storeList, path.join(folder, file));
+				});
+				resolve(storeList);
+			});
+		});
+		*/
+	},
+
+	async updateJsonFileAsync(jsonFile, list, data) {
+		const newList = [...list, ...data];
+		const strJson = JSON.stringify(newList);
+		await fs.writeFile(jsonFile, strJson);
+		/*
+		return new Promise(resolve => {
+			const strJson = JSON.stringify(list);
+			fs.writeFile(jsonFile, strJson, 'utf-8', err => {
+				if (err) {
+					throw err;
+				}
+				resolve(true);
+			});
+		});
+		*/
+	},
+
+	async readJsonFileAsync(jsonFilePath) {
+		const result = await fs.readFile(jsonFilePath, 'utf-8');
+		if (result) return JSON.parse(result);
+		return [];
+		/*
+		return new Promise(resolve => {
+			fs.readFile(jsonFilePath, 'utf-8', (error, data) => {
+				if (error) {
+					throw error;
+				}
+				if (!data) {
+					resolve([]);
+				} else {
+					resolve(JSON.parse(data));
+				}
+			});
+		});
+		*/
+	},
+
+	async moveToProcessedAsync(src, dest, file) {
+		try {
+			const srcPath = path.join(src, file);
+			const destPath = path.join(dest, file);
+			await fs.rename(srcPath, destPath);
+		} catch (e) {
+			console.log(e);
+		}
+
+		/*
+		return new Promise(resolve => {
+
+			fs.rename(srcPath, destPath, error => {
+				if (error) {
+					throw error;
+				}
+				resolve(true);
+			});
+		});
+		*/
+	},
+};
