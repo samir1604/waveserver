@@ -1,5 +1,6 @@
 {
 	"audioFolderName": "audiofiles",
 	"jsonFileName": "wavlist.json",
-	"processedFolderName": "processed"
+	"processedFolderName": "processed",
+	"MaxEnd": 10
 }
