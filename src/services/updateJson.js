@@ -4,7 +4,7 @@ const fileTools = require('../filework/fileTools');
 const config = require('../config.json');
 
 const baseDir = path.resolve(__dirname, '..');
-const audioPath = path.join(baseDir, config.audioFolderName);
+const audioPath = config.audioFolderName;
 const jsonFile = path.join(baseDir, config.jsonFileName);
 const processedPath = path.join(baseDir, config.processedFolderName);
 

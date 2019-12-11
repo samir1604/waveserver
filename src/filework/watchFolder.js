@@ -5,8 +5,7 @@ const chokidar = require('chokidar');
 const config = require('../config.json');
 const updateJson = require('../services/updateJson');
 
-const baseDir = path.resolve(__dirname, '..');
-const audioPath = path.join(baseDir, config.audioFolderName);
+const audioPath = config.audioFolderName;
 
 async function start() {
 	try {
