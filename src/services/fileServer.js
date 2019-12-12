@@ -10,4 +10,8 @@ module.exports = {
 		const result = await fileTools.readJsonFileAsync(jsonFile);
 		return result.slice(start, end);
 	},
+	async getTotal() {
+		const result = await fileTools.readJsonFileAsync(jsonFile);
+		return result.length;
+	},
 };

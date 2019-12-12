@@ -8,6 +8,11 @@ const config = require('../config.json');
 const router = Router();
 const MAX_RECORDS = config.MaxEnd;
 
+router.get('/total', async (req, res) => {
+	const total = await services.getTotal();
+	res.json({ total });
+});
+
 router.get('/:num_page', async (req, res) => {
 	const num_page = parseInt(req.params.num_page);
 	const start = (num_page - 1) * MAX_RECORDS;
