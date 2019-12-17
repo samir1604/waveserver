@@ -1,6 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+const ADD_DAYS = 2;
+
 module.exports = {
 	async createJsonListAsync(list, audioFolder, processFolder) {
 		let newList = [];
@@ -14,17 +16,21 @@ module.exports = {
 
 	async createElementAsync(file, folder) {
 		const { size, birthtime } = await fs.stat(path.join(folder, file));
+		const deleteDate = new Date(birthtime);
+		deleteDate.setDate(birthtime.getDate() + ADD_DAYS);
 		return {
 			name: file,
 			size,
 			created: birthtime,
+			deleteOn: deleteDate,
 		};
 	},
 
-	moveToProcessFolder(src, dest, file) {
+	async moveToProcessFolder(src, dest, file) {
 		const srcPath = path.join(src, file);
 		const destPath = path.join(dest, file);
-		fs.rename(srcPath, destPath);
+		await fs.copyFile(srcPath, destPath);
+		fs.unlink(srcPath);
 	},
 
 	async readJsonFileAsync(jsonFilePath) {

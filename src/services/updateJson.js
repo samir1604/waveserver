@@ -9,21 +9,17 @@ const jsonFile = path.join(baseDir, config.jsonFileName);
 const processedPath = path.join(baseDir, config.processedFolderName);
 
 async function update() {
-	try {
-		const audioList = await fs.readdir(audioPath);
-		if (audioList.length <= 0) return;
+	const audioList = await fs.readdir(audioPath);
+	if (audioList.length <= 0) return;
 
-		const jsonList = await fileTools.createJsonListAsync(
-			audioList,
-			audioPath,
-			processedPath
-		);
+	const jsonList = await fileTools.createJsonListAsync(
+		audioList,
+		audioPath,
+		processedPath
+	);
 
-		const jsonData = await fileTools.readJsonFileAsync(jsonFile);
-		fileTools.updateJsonFileAsync(jsonFile, jsonList, jsonData);
-	} catch (err) {
-		console.log(err);
-	}
+	const jsonData = await fileTools.readJsonFileAsync(jsonFile);
+	fileTools.updateJsonFileAsync(jsonFile, jsonList, jsonData);
 }
 
 module.exports.update = update;

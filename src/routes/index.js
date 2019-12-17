@@ -29,7 +29,7 @@ router.get(URL_AUDIO, async (req, res) => {
 	const audioName = req.params.audio;
 	const mimeType = {
 		'.wav': 'audio/wav',
-		'.mp3': 'audio/mpeg',
+		'.mp3': 'audio/mp3',
 	};
 
 	const baseDir = path.resolve(__dirname, '..');

@@ -1,5 +1,5 @@
 {
-	"audioFolderName": "D:\\Proyectos\\waveview\\waveserver\\src\\audiofiles",
+	"audioFolderName": "C:\\audiofiles",
 	"jsonFileName": "wavlist.json",
 	"processedFolderName": "processed",
 	"MaxEnd": 10
