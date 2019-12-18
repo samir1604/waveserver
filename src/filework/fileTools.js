@@ -1,9 +1,11 @@
 const fs = require('fs').promises;
 const path = require('path');
+const config = require('../config.json');
 
-const ADD_DAYS = 2;
+const ADD_DAYS = config.daysToDelete;
 
 module.exports = {
+	/// DEPRECATED ///
 	async createJsonListAsync(list, audioFolder, processFolder) {
 		let newList = [];
 		for await (const file of list) {
@@ -39,9 +41,16 @@ module.exports = {
 		return [];
 	},
 
+	/// DEPRECATED ///
 	async updateJsonFileAsync(jsonFile, list, data) {
 		const newList = [...list, ...data];
 		const strJson = JSON.stringify(newList);
 		await fs.writeFile(jsonFile, strJson);
+	},
+
+	async updateJsonFile(jsonFilePath, jsonList) {
+		const jsonData = await this.readJsonFileAsync(jsonFilePath);
+		const newList = [...jsonList, ...jsonData];
+		await fs.writeFile(jsonFilePath, JSON.stringify(newList));
 	},
 };
