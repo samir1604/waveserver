@@ -1,10 +1,9 @@
 const path = require('path');
 const fileTools = require('./fileTools');
-const config = require('../config.json');
 
 const baseDir = path.resolve(__dirname, '..');
-const jsonFile = path.join(baseDir, config.jsonFileName);
-const processedPath = path.join(baseDir, config.processedFolderName);
+const jsonFile = path.join(baseDir, process.env.JSON_FILE);
+const processedPath = path.join(baseDir, process.env.PROCESSED_FOLDER);
 
 async function deleteFiles() {
 	const currentDate = new Date();

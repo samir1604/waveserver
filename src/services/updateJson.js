@@ -1,13 +1,12 @@
 const fs = require('fs').promises;
 const path = require('path');
 const fileTools = require('../filework/fileTools');
-const config = require('../config.json');
 
 const baseDir = path.resolve(__dirname, '..');
-const audioPath = config.audioFolderName;
-const jsonFile = path.join(baseDir, config.jsonFileName);
-const processedPath = path.join(baseDir, config.processedFolderName);
-const JSON_BUFFER = config.jsonBuffer;
+const audioPath = process.env.AUDIO_FOLDER;
+const jsonFile = path.join(baseDir, process.env.JSON_FILE);
+const processedPath = path.join(baseDir, process.env.PROCESSED_FOLDER);
+const JSON_BUFFER = process.env.JSON_BUFFER;
 
 async function updateJson(jsonList, name) {
 	const element = await fileTools.createElementAsync(name, audioPath);

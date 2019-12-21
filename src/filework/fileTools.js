@@ -1,8 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
-const config = require('../config.json');
 
-const ADD_DAYS = config.daysToDelete;
+const ADD_DAYS = process.env.DAYS_TO_DELETE;
 
 module.exports = {
 	/// DEPRECATED ///

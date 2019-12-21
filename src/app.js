@@ -4,7 +4,7 @@ const app = express();
 
 // Settings
 app.set('appName', 'Audio wav server');
-app.set('port', 5000);
+app.set('port', process.env.PORT);
 
 //Enable CORS
 app.use((req, res, next) => {

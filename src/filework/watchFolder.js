@@ -1,11 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const chokidar = require('chokidar');
-
-const config = require('../config.json');
 const updateJson = require('../services/updateJson');
-
-const audioPath = config.audioFolderName;
+const audioPath = process.env.AUDIO_FOLDER;
 
 async function start() {
 	try {

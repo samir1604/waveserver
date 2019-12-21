@@ -3,14 +3,14 @@ const fs = require('fs');
 const path = require('path');
 
 const services = require('../services/fileServer');
-const config = require('../config.json');
 
 const router = Router();
-const MAX_RECORDS = config.MaxEnd;
+const MAX_RECORDS = process.env.MAX_END;
+const processedFolder = process.env.PROCESSED_FOLDER;
 
-const URL_TOTAL = '/waveserver/api/total';
-const URL_PAGE = '/waveserver/api/page/:num_page';
-const URL_AUDIO = '/waveserver/api/audio/:audio';
+const URL_TOTAL = process.env.URL_TOTAL;
+const URL_PAGE = process.env.URL_PAGE;
+const URL_AUDIO = process.env.URL_AUDIO;
 
 router.get(URL_TOTAL, async (req, res) => {
 	const total = await services.getTotal();
@@ -33,7 +33,7 @@ router.get(URL_AUDIO, async (req, res) => {
 	};
 
 	const baseDir = path.resolve(__dirname, '..');
-	const pathFolder = path.join(baseDir, config.processedFolderName, audioName);
+	const pathFolder = path.join(baseDir, processedFolder, audioName);
 	const ext = path.parse(pathFolder).ext;
 	fs.readFile(pathFolder, (error, data) => {
 		res.setHeader('Content-type', mimeType[ext] || 'text/plain');
