@@ -17,8 +17,8 @@ router.get(URL_TOTAL, async (req, res) => {
 });
 
 router.get(URL_PAGE, async (req, res) => {
-	const num_page = parseInt(req.params.num_page);
-	const itemPerPage = parseInt(req.params.item_count);
+	const num_page = parseInt(req.query.pag);
+	const itemPerPage = parseInt(req.query.items);
 	const start = (num_page - 1) * itemPerPage;
 	const end = start + itemPerPage;
 	const jsonList = await services.get(start, end);
