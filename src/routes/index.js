@@ -5,7 +5,6 @@ const path = require('path');
 const services = require('../services/fileServer');
 
 const router = Router();
-const MAX_RECORDS = process.env.MAX_END;
 const processedFolder = process.env.PROCESSED_FOLDER;
 
 const URL_TOTAL = process.env.URL_TOTAL;
@@ -19,8 +18,9 @@ router.get(URL_TOTAL, async (req, res) => {
 
 router.get(URL_PAGE, async (req, res) => {
 	const num_page = parseInt(req.params.num_page);
-	const start = (num_page - 1) * MAX_RECORDS;
-	const end = start + MAX_RECORDS;
+	const itemPerPage = parseInt(req.params.item_count);
+	const start = (num_page - 1) * itemPerPage;
+	const end = start + itemPerPage;
 	const jsonList = await services.get(start, end);
 	res.json(jsonList);
 });

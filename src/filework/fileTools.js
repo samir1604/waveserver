@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const ADD_DAYS = process.env.DAYS_TO_DELETE;
+const ADD_DAYS = parseInt(process.env.DAYS_TO_DELETE);
 
 module.exports = {
 	/// DEPRECATED ///

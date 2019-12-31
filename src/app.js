@@ -2,9 +2,10 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+const appPort = parseInt(process.env.PORT);
 // Settings
 app.set('appName', 'Audio wav server');
-app.set('port', process.env.PORT);
+app.set('port', appPort);
 
 //Enable CORS
 app.use((req, res, next) => {

@@ -25,5 +25,4 @@ yarn-error.log*
 #audios
 /src/audiofiles
 /src/processed
-
-wavlist.json
+/src/wavlist.json

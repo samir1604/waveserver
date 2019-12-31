@@ -6,7 +6,7 @@ const baseDir = path.resolve(__dirname, '..');
 const audioPath = process.env.AUDIO_FOLDER;
 const jsonFile = path.join(baseDir, process.env.JSON_FILE);
 const processedPath = path.join(baseDir, process.env.PROCESSED_FOLDER);
-const JSON_BUFFER = process.env.JSON_BUFFER;
+const JSON_BUFFER = parseInt(process.env.JSON_BUFFER);
 
 async function updateJson(jsonList, name) {
 	const element = await fileTools.createElementAsync(name, audioPath);
