@@ -1,30 +1,24 @@
 const { Router } = require('express');
-const fs = require('fs');
-const path = require('path');
+const getTotalAudio = require('../controller/getTotalAudio');
+const getPage = require('../controller/getPage');
+const getAudio = require('../controller/getAudio');
+// const fs = require('fs');
+// const path = require('path');
 
-const services = require('../services/fileServer');
+// const services = require('../services/fileServer');
 
 const router = Router();
-const processedFolder = process.env.PROCESSED_FOLDER;
+// const processedFolder = process.env.PROCESSED_FOLDER;
 
 const URL_TOTAL = process.env.URL_TOTAL;
 const URL_PAGE = process.env.URL_PAGE;
 const URL_AUDIO = process.env.URL_AUDIO;
 
-router.get(URL_TOTAL, async (req, res) => {
-	const total = await services.getTotal();
-	res.json({ total });
-});
+router.get(URL_TOTAL, getTotalAudio);
+router.get(URL_PAGE, getPage);
+router.get(URL_AUDIO, getAudio);
 
-router.get(URL_PAGE, async (req, res) => {
-	const num_page = parseInt(req.query.pag);
-	const itemPerPage = parseInt(req.query.items);
-	const start = (num_page - 1) * itemPerPage;
-	const end = start + itemPerPage;
-	const jsonList = await services.get(start, end);
-	res.json(jsonList);
-});
-
+/*
 router.get(URL_AUDIO, async (req, res) => {
 	const audioName = req.params.audio;
 	const mimeType = {
@@ -40,5 +34,7 @@ router.get(URL_AUDIO, async (req, res) => {
 		res.end(data);
 	});
 });
+
+*/
 
 module.exports = router;

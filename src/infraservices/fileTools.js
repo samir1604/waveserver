@@ -5,6 +5,7 @@ const ADD_DAYS = parseInt(process.env.DAYS_TO_DELETE);
 
 module.exports = {
 	/// DEPRECATED ///
+	/*
 	async createJsonListAsync(list, audioFolder, processFolder) {
 		let newList = [];
 		for await (const file of list) {
@@ -13,6 +14,20 @@ module.exports = {
 			this.moveToProcessFolder(audioFolder, processFolder, file);
 		}
 		return newList;
+	},
+	*/
+
+	async createItemAsync(pathFile) {
+		const { size, birthtime } = await fs.stat(pathFile);
+		const deleteDate = new Date(birthtime);
+		const name = path.basename(pathFile);
+		deleteDate.setDate(birthtime.getDate() + ADD_DAYS);
+		return {
+			name,
+			size,
+			created: birthtime,
+			deleteOn: deleteDate,
+		};
 	},
 
 	async createElementAsync(file, folder) {
@@ -36,20 +51,34 @@ module.exports = {
 
 	async readJsonFileAsync(jsonFilePath) {
 		const result = await fs.readFile(jsonFilePath, 'utf-8');
-		if (result) return JSON.parse(result);
-		return [];
+		return result ? JSON.parse(result) : [];
+	},
+
+	async readAudioFileAsync(audioPath) {
+		return await fs.readFile(audioPath);
 	},
 
 	/// DEPRECATED ///
+	/*
 	async updateJsonFileAsync(jsonFile, list, data) {
 		const newList = [...list, ...data];
 		const strJson = JSON.stringify(newList);
 		await fs.writeFile(jsonFile, strJson);
 	},
+	*/
 
 	async updateJsonFile(jsonFilePath, jsonList) {
 		const jsonData = await this.readJsonFileAsync(jsonFilePath);
 		const newList = [...jsonList, ...jsonData];
 		await fs.writeFile(jsonFilePath, JSON.stringify(newList));
+	},
+	async updateJsonAsync(jsonFilePath, item) {
+		const jsonData = await this.readJsonFileAsync(jsonFilePath);
+		const newList = [...jsonData, item];
+		await fs.writeFile(jsonFilePath, JSON.stringify(newList));
+	},
+
+	async deleteFile(filePath) {
+		await fs.unlink(filePath);
 	},
 };

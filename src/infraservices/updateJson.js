@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const fileTools = require('../filework/fileTools');
+const fileTools = require('./fileTools');
 
 const baseDir = path.resolve(__dirname, '..');
 const audioPath = process.env.AUDIO_FOLDER;
